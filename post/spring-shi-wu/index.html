@@ -1,22 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://gongPing123456.github.io</id>
-    <title>Gridea</title>
-    <updated>2021-05-30T08:47:46.861Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://gongPing123456.github.io"/>
-    <link rel="self" href="https://gongPing123456.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://gongPing123456.github.io/images/avatar.png</logo>
-    <icon>https://gongPing123456.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Gridea</rights>
-    <entry>
-        <title type="html"><![CDATA[Spring 事务]]></title>
-        <id>https://gongPing123456.github.io/post/spring-shi-wu/</id>
-        <link href="https://gongPing123456.github.io/post/spring-shi-wu/">
-        </link>
-        <updated>2021-05-30T08:45:39.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="事务特性-acid">事务特性 ACID</h3>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Spring 事务 | Gridea</title>
+<link rel="shortcut icon" href="https://gongPing123456.github.io/favicon.ico?v=1622364457331">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://gongPing123456.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Spring 事务 | Gridea - Atom Feed" href="https://gongPing123456.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="事务特性 ACID
+
+原子性 （atomicity） 要么完成要不不完成
+一致性   (consistency)  事务开始和结束，数据库的完整性没有发生改变
+隔离性   (Isolation)  两个事务是相互隔离开的，一个事务执行期间 ..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://gongPing123456.github.io">
+  <img class="avatar" src="https://gongPing123456.github.io/images/avatar.png?v=1622364457331" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Spring 事务
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-05-30
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="事务特性-acid">事务特性 ACID</h3>
 <ul>
 <li>原子性 （atomicity） 要么完成要不不完成</li>
 <li>一致性   (consistency)  事务开始和结束，数据库的完整性没有发生改变</li>
@@ -367,38 +443,107 @@
     }
 </code></pre>
 <h5 id="注意-注解的方法如果不是public非public-方法无法获取事务的配置信息">注意 注解的方法如果不是<code>public</code>，非<code>public</code> 方法无法获取事务的配置信息</h5>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://gongPing123456.github.io/post/hello-gridea/</id>
-        <link href="https://gongPing123456.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
-]]></content>
-    </entry>
-</feed>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7-acid">事务特性 ACID</a></li>
+<li><a href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%BA%A7%E5%88%AB%E6%8F%90%E5%8D%87%E7%9A%84%E6%8E%92%E5%88%97">事务的隔离级别（级别提升的排列）</a></li>
+<li><a href="#%E8%84%8F%E8%AF%BB-%E5%B9%BB%E8%AF%BB-%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB">脏读、幻读、不可重复读</a></li>
+<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA">spring 事务的传播行为</a>
+<ul>
+<li><a href="#%E5%A4%96%E5%B1%82%E4%BA%8B%E5%8A%A1%E4%B8%8D%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%86%85%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E6%8F%90%E4%BA%A4%E5%9B%9E%E6%BB%9A">外层事务不会影响内部事务的提交/回滚</a></li>
+<li><a href="#%E5%86%85%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%BC%82%E5%B8%B8%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%A4%96%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%9B%9E%E6%BB%9A">内部事务的异常，会影响外部事务的回滚</a></li>
+</ul>
+</li>
+<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E4%B8%8D%E7%94%9F%E6%95%88%E5%8E%9F%E5%9B%A0">spring 事务不生效原因</a></li>
+<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F">spring 事务的配置方式</a>
+<ul>
+<li><a href="#%E7%BC%96%E7%A8%8B%E5%BC%8F%E4%BA%8B%E5%8A%A1">编程式事务</a></li>
+<li><a href="#%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1">注解实现事务</a>
+<ul>
+<li><a href="#%E6%B3%A8%E6%84%8F-%E6%B3%A8%E8%A7%A3%E7%9A%84%E6%96%B9%E6%B3%95%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AFpublic%E9%9D%9Epublic-%E6%96%B9%E6%B3%95%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF">注意 注解的方法如果不是<code>public</code>，非<code>public</code> 方法无法获取事务的配置信息</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://gongPing123456.github.io/post/hello-gridea/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by gongPing
+  <a class="rss" href="https://gongPing123456.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
