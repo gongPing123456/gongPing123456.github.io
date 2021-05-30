@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gongPing123456.github.io</id>
-    <title>Gridea</title>
-    <updated>2021-05-30T08:47:46.861Z</updated>
+    <title>少年的小破站</title>
+    <updated>2021-05-30T11:32:10.366Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gongPing123456.github.io"/>
     <link rel="self" href="https://gongPing123456.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://gongPing123456.github.io/images/avatar.png</logo>
     <icon>https://gongPing123456.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Gridea</rights>
+    <rights>All rights reserved 2021, 少年的小破站</rights>
     <entry>
         <title type="html"><![CDATA[Spring 事务]]></title>
         <id>https://gongPing123456.github.io/post/spring-shi-wu/</id>
         <link href="https://gongPing123456.github.io/post/spring-shi-wu/">
         </link>
         <updated>2021-05-30T08:45:39.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="事务特性-acid">事务特性 ACID</h3>
+        <summary type="html"><![CDATA[<p>✍️  Spring 事务基础的描述... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>✍️  Spring 事务基础的描述... ...</p>
+<!-- more -->
+<h3 id="事务特性-acid">事务特性 ACID</h3>
 <ul>
 <li>原子性 （atomicity） 要么完成要不不完成</li>
 <li>一致性   (consistency)  事务开始和结束，数据库的完整性没有发生改变</li>

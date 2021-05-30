@@ -1,98 +1,103 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spring 事务 | Gridea</title>
-<link rel="shortcut icon" href="https://gongPing123456.github.io/favicon.ico?v=1622364457331">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+    <meta charset="utf-8" >
+
+<title>Spring 事务 | 少年的小破站</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://gongPing123456.github.io/favicon.ico?v=1622374177930">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://gongPing123456.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Spring 事务 | Gridea - Atom Feed" href="https://gongPing123456.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="事务特性 ACID
 
-原子性 （atomicity） 要么完成要不不完成
-一致性   (consistency)  事务开始和结束，数据库的完整性没有发生改变
-隔离性   (Isolation)  两个事务是相互隔离开的，一个事务执行期间 ..." />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://gongPing123456.github.io">
-  <img class="avatar" src="https://gongPing123456.github.io/images/avatar.png?v=1622364457331" alt="">
-  </a>
-  <h1 class="site-title">
-    Gridea
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://gongPing123456.github.io">少年的小破站</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Spring 事务
-            </h2>
-            <div class="post-info">
-              <span>
-                2021-05-30
-              </span>
-              <span>
-                9 min read
-              </span>
-              
-            </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h3 id="事务特性-acid">事务特性 ACID</h3>
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Spring 事务</h1>
+            <p class="article-meta">
+              2021-05-30
+              
+                <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge ">
+                  Spring
+                </a>
+              
+            </p>
+            
+              <img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/image/logo7.gif" alt="Spring 事务">
+            
+            <div class="post-content">
+              <p>✍️  Spring 事务基础的描述... ...</p>
+<!-- more -->
+<h3 id="事务特性-acid">事务特性 ACID</h3>
 <ul>
 <li>原子性 （atomicity） 要么完成要不不完成</li>
 <li>一致性   (consistency)  事务开始和结束，数据库的完整性没有发生改变</li>
@@ -444,106 +449,138 @@
 </code></pre>
 <h5 id="注意-注解的方法如果不是public非public-方法无法获取事务的配置信息">注意 注解的方法如果不是<code>public</code>，非<code>public</code> 方法无法获取事务的配置信息</h5>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7-acid">事务特性 ACID</a></li>
-<li><a href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%BA%A7%E5%88%AB%E6%8F%90%E5%8D%87%E7%9A%84%E6%8E%92%E5%88%97">事务的隔离级别（级别提升的排列）</a></li>
-<li><a href="#%E8%84%8F%E8%AF%BB-%E5%B9%BB%E8%AF%BB-%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB">脏读、幻读、不可重复读</a></li>
-<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA">spring 事务的传播行为</a>
-<ul>
-<li><a href="#%E5%A4%96%E5%B1%82%E4%BA%8B%E5%8A%A1%E4%B8%8D%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%86%85%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E6%8F%90%E4%BA%A4%E5%9B%9E%E6%BB%9A">外层事务不会影响内部事务的提交/回滚</a></li>
-<li><a href="#%E5%86%85%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%BC%82%E5%B8%B8%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%A4%96%E9%83%A8%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%9B%9E%E6%BB%9A">内部事务的异常，会影响外部事务的回滚</a></li>
-</ul>
-</li>
-<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E4%B8%8D%E7%94%9F%E6%95%88%E5%8E%9F%E5%9B%A0">spring 事务不生效原因</a></li>
-<li><a href="#spring-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F">spring 事务的配置方式</a>
-<ul>
-<li><a href="#%E7%BC%96%E7%A8%8B%E5%BC%8F%E4%BA%8B%E5%8A%A1">编程式事务</a></li>
-<li><a href="#%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1">注解实现事务</a>
-<ul>
-<li><a href="#%E6%B3%A8%E6%84%8F-%E6%B3%A8%E8%A7%A3%E7%9A%84%E6%96%B9%E6%B3%95%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AFpublic%E9%9D%9Epublic-%E6%96%B9%E6%B3%95%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF">注意 注解的方法如果不是<code>public</code>，非<code>public</code> 方法无法获取事务的配置信息</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
+
+          
         </div>
+        <div id="vcomments" style="background: #ffffff;"></div>
+
+
 
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://gongPing123456.github.io/post/hello-gridea/">
-              <h3 class="post-title">
-                Hello Gridea
-              </h3>
-            </a>
-          </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://gongPing123456.github.io/post/hello-gridea/">
+                <h3 class="post-title">
+                  Hello Gridea
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://gongPing123456.github.io/images/avatar.png?v=1622374177930" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-  Powered by gongPing
-  <a class="rss" href="https://gongPing123456.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://gongPing123456.github.io/post/spring-shi-wu/">Spring 事务</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://gongPing123456.github.io/post/about/">关于我</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://gongPing123456.github.io/post/hello-gridea/">Hello Gridea</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge ">
+          Spring
+        </a>
+      
+        <a href="https://gongPing123456.github.io/tag/WUwcb3q3_/" class="badge secondary">
+          Gridea
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by gongPing | <a class="rss" href="https://gongPing123456.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
+
+    
   </body>
 </html>
+
+ <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'Yryy5DtGEusktB3C53OhhJbO-gzGzoHsz',
+            appKey: 'PvJj1sbYVBVtHtkuyHe42umW'
+        })
+    </script> 
+
+
+<style>
+.v[data-class=v] .vinput {
+
+      border: solid;
+    resize: none;
+    outline: none;
+    padding: 10px 5px;
+    max-width: 100%;
+    font-size: .775em;
+}
+</style>
