@@ -8,7 +8,7 @@
 <meta name="description" content="🚆早一点，再早一点完善我的技术栈😊">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://gongPing123456.github.io/favicon.ico?v=1622704455951">
+<link rel="shortcut icon" href="https://gongPing123456.github.io/favicon.ico?v=1622708000922">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -90,11 +90,11 @@
                         <p class="article-meta">
                             2021-06-03
                                 
-                                    <a href="https://gongPing123456.github.io/tag/jF7iulx-1/" class="badge ">
+                                    <a href="https://gongPing123456.github.io/tag/jF7iulx-1/" class="badge success">
                                         算法
                                     </a>
                                     
-                                    <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge warning">
+                                    <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge success">
                                         链表
                                     </a>
                                     
@@ -215,6 +215,31 @@ public class ListNode {
         return head;
     }
 </code></pre>
+<p>反转n-m（2）</p>
+<pre><code class="language-java">public  ListNode reverseList(ListNode head,int m ,int n){
+        // 在头节点之前定义一个新的节点，preHead
+        ListNode preHead = new ListNode(0);
+        preHead.next = head;
+        // 定义一个cur节点，让其从preHead开始，先找到第m-1个节点，作为curPre
+        ListNode cur = preHead;
+        for(int i = 1; i &lt; m; i++)
+            cur = cur.next;
+        ListNode curPre = cur; // cur 为 m-1;
+        cur = cur.next; // 现在cur为第m个节点
+        // 从第m个节点到第n个节点，我们需要将n-m+1个节点进行翻转，那就是将n-m个节点插在第m个节点之前，因此需要n-m次操作
+        // 进入循环之前需要定义一个curNext
+        ListNode curNext = null;
+        for(int i = 0; i &lt; n-m; i++){
+            // 这个地方也可写成 for(int i = m; i &lt; n; i++)
+            curNext = cur.next;
+            cur.next = curNext.next;
+            curNext.next = curPre.next;
+            curPre.next = curNext;
+        }
+        // 结束后，输出preHead.next即可
+        return preHead.next;
+    }
+    ```</code></pre>
 
                                 </div>
                     </article>
@@ -253,7 +278,7 @@ public class ListNode {
 
             <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="https://gongPing123456.github.io/images/avatar.png?v=1622704455951" class="no-responsive avatar">
+    <img src="https://gongPing123456.github.io/images/avatar.png?v=1622708000922" class="no-responsive avatar">
     <div class="text-muted">🚆早一点，再早一点完善我的技术栈😊</div>
     <div class="social-container">
       
@@ -319,19 +344,19 @@ public class ListNode {
           算法
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge ">
+        <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge warning">
           链表
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/EKQ26gbcy/" class="badge success">
+        <a href="https://gongPing123456.github.io/tag/EKQ26gbcy/" class="badge secondary">
           递归
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge success">
+        <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge secondary">
           Spring
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/WUwcb3q3_/" class="badge secondary">
+        <a href="https://gongPing123456.github.io/tag/WUwcb3q3_/" class="badge success">
           Gridea
         </a>
       
