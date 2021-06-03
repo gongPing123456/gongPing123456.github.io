@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gongPing123456.github.io</id>
     <title>少年的小破站</title>
-    <updated>2021-06-02T07:19:57.111Z</updated>
+    <updated>2021-06-03T07:15:38.706Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gongPing123456.github.io"/>
     <link rel="self" href="https://gongPing123456.github.io/atom.xml"/>
@@ -10,6 +10,124 @@
     <logo>https://gongPing123456.github.io/images/avatar.png</logo>
     <icon>https://gongPing123456.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 少年的小破站</rights>
+    <entry>
+        <title type="html"><![CDATA[链表反转]]></title>
+        <id>https://gongPing123456.github.io/post/lian-biao-fan-zhuan/</id>
+        <link href="https://gongPing123456.github.io/post/lian-biao-fan-zhuan/">
+        </link>
+        <updated>2021-06-03T07:08:05.000Z</updated>
+        <summary type="html"><![CDATA[<p>😭算法太难了 ，基本的一个做了好久 ，还抄了答案</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>😭算法太难了 ，基本的一个做了好久 ，还抄了答案</p>
+<!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/title.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">// 链表结构
+public class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x){val =x;}
+}
+</code></pre>
+<h3 id="第一步-反转整个链表">第一步 ：反转整个链表</h3>
+<pre><code class="language-java">/**
+     * 递归反转整理链表
+     * @param head
+     * @return
+     * 1-&gt;2-&gt;3
+     * 1-&gt;2 第一步 返回一个 2
+     以 1-&gt;2-&gt;null 为例子
+     */
+    ListNode reverse(ListNode head){
+        if (head.next == null){return head;}
+        ListNode listHead =reverse(head.next);// 返回2  2-&gt;null
+        head.next.next =head;// 1-&gt;2 -&gt;null   那么将head（1） 给 2-&gt;1
+        head.next =null;
+        return listHead;
+    }
+</code></pre>
+<h4 id="反转整个链表2">反转整个链表（2）</h4>
+<pre><code class="language-java">// 反转的 另一种方法
+    public  ListNode reverseList(ListNode head){
+        //  1- &gt;  2  -&gt; 3
+        // 前一个节点
+        ListNode pre =null;
+        // 当前节点 1
+        ListNode cur =head;
+        // 下一个节点
+        ListNode next=null;
+
+        while (cur != null){
+            // 下一个节点  =  当前节点的下一个节点
+            // next = 节点 2
+            // next =节点 3
+            // next = null
+            next =cur.next;
+            // 当前节点的下一个节点 =  前一个节点
+            //  节点 1 .next = null
+            // 节点 2.next =节点 1
+            // 节点3 .next = 节点2
+            cur.next=pre;
+            // 前一个节点  = 当前节点
+            // pre = 节点 1
+            // pre = 节点 2
+            // pre =节点 3
+            pre =cur;
+            // 当前节点 = 下一个节点
+            // cur = 节点 2
+            // cur =节点 3
+            // cur =null
+            cur=next;
+        }
+        return pre;
+    }
+</code></pre>
+<h3 id="第二步反转前n个节点">第二步：反转前N个节点</h3>
+<pre><code class="language-java">    /**
+     * 递归反转整理链表
+     * @param head
+     * @return
+     * 1-&gt;2-&gt;3 为例子
+     * 反转前两个
+     * 第一步 ：   将2 下一个取出来  nextNode =3
+     *  将 1 下一个 节点 2  的下一个节点  3  变为 1
+     *  2 和 1 节点反转
+     *  随后将 1 的下一个节点 变为nextNode
+     *  2-&gt;1-&gt;3
+     *  在返回 第二个节点 也就是 2
+     */
+    ListNode nextNode =null;
+    ListNode reverse(ListNode head,int n){
+//      if (head.next == null){
+//
+//          return head;
+//      }
+        if (n == 1){
+            nextNode=head.next;
+            return head;
+        }
+        ListNode listHead =reverse(head.next,n-1);// 返回2  2-&gt;null
+        head.next.next =head;// 1-&gt;2 -&gt;null   那么将head（1） 给 2-&gt;1
+        //head.next =null;
+        head.next =nextNode;
+        return listHead;
+    }
+</code></pre>
+<h3 id="第三步-反转n-m">第三步： 反转n-m</h3>
+<pre><code class="language-java">public ListNode betweenListNode(ListNode head,int m ,int n){
+        // 如果为1 以后 就是反转  链表的  前 n个节点
+        if (m == 1){
+            return reverse(head,n);
+        }
+        // 采用 m 减少到 1  以后  n的长度正好是 n-m+1 的
+        // 也就是需要 反转的数量 和位置
+
+        // head.next 目的是为了指向 反转的节点  （head.next 传入参数 ：将下一个需要验证是否反转的节点传入）
+        head.next = betweenListNode(head.next, m - 1, n - 1);
+        return head;
+    }
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[暂时不知道]]></title>
         <id>https://gongPing123456.github.io/post/aaaa/</id>
