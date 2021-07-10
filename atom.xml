@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gongPing123456.github.io</id>
     <title>少年的小破站</title>
-    <updated>2021-06-16T08:46:52.999Z</updated>
+    <updated>2021-07-10T04:22:18.611Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gongPing123456.github.io"/>
     <link rel="self" href="https://gongPing123456.github.io/atom.xml"/>
@@ -10,6 +10,122 @@
     <logo>https://gongPing123456.github.io/images/avatar.png</logo>
     <icon>https://gongPing123456.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 少年的小破站</rights>
+    <entry>
+        <title type="html"><![CDATA[Sql 插入速度问题]]></title>
+        <id>https://gongPing123456.github.io/post/sql-cha-ru-su-du-wen-ti/</id>
+        <link href="https://gongPing123456.github.io/post/sql-cha-ru-su-du-wen-ti/">
+        </link>
+        <updated>2021-07-10T04:19:23.000Z</updated>
+        <summary type="html"><![CDATA[<p>🤓简单写一下，后续会深入Mybatis 和Mysql</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>🤓简单写一下，后续会深入Mybatis 和Mysql</p>
+<!-- more -->
+<blockquote>
+<p>在使用Mybatis-plus savaBatch 插入 1000条左右数据，会相应很久的时候</p>
+<p>开始以为是@Transactional的问题，😄的解决，结果发现是单纯的时间太长</p>
+<p>接下来 ，重新开一个简单的系统测试一下。🍳</p>
+</blockquote>
+<h3 id="准备">准备</h3>
+<img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/image-20210710112617442.png" alt="image-20210710112617442" style="zoom:50%;" />
+<p>创建一个用于插入的数据库。</p>
+<p>创建一个User 的插入结构，<img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/image-20210710112858295.png" alt="image-20210710112858295" style="zoom:50%;" /></p>
+<h3 id="使用for循环插入1000条数据">使用For循环插入1000条数据</h3>
+<pre><code class="language-java">@Test
+	void contextLoads() {
+		long current=System.currentTimeMillis();
+
+		for (int i = 0; i &lt; 1000; i++) {
+			User user=new User();
+			user.setName(System.currentTimeMillis()+&quot;&quot;);
+			user.setNum(i);
+			userService.save(user);
+		}
+		long end=System.currentTimeMillis();
+		log.info(&quot;插入时间：&quot;+(end-current));
+
+	}
+</code></pre>
+<p>插入时间：78611</p>
+<hr>
+<h3 id="使用mybatis-plus-savebatch-插入-1000条数据">使用Mybatis-plus saveBatch 插入 1000条数据</h3>
+<pre><code class="language-java">public void plusTest(){
+
+			long current=System.currentTimeMillis();
+			List&lt;User&gt; users=new ArrayList&lt;&gt;();
+			for (int i = 0; i &lt; 1000; i++) {
+				User user=new User();
+				user.setName(System.currentTimeMillis()+&quot;&quot;);
+				user.setNum(i);
+				users.add(user);
+			}
+			userService.saveBatch(users);
+			long end=System.currentTimeMillis();
+			log.info(&quot;插入时间：&quot;+(end-current));
+
+
+	}
+</code></pre>
+<p>插入时间：36904</p>
+<hr>
+<h4 id="mybatis-plus-savabatch-源码">Mybatis-plus savaBatch 源码</h4>
+<pre><code class="language-java"> @Transactional(
+        rollbackFor = {Exception.class}
+    )
+    public boolean saveBatch(Collection&lt;T&gt; entityList, int batchSize) {
+        String sqlStatement = this.sqlStatement(SqlMethod.INSERT_ONE);
+        int size = entityList.size();
+        this.executeBatch((sqlSession) -&gt; {
+            int i = 1;
+
+            for(Iterator var6 = entityList.iterator(); var6.hasNext(); ++i) {
+                T entity = var6.next();
+                sqlSession.insert(sqlStatement, entity);
+                if (i % batchSize == 0 || i == size) {
+                    sqlSession.flushStatements();
+                }
+            }
+
+        });
+        return true;
+    }
+</code></pre>
+<h3 id="使用mybatis-foreach-插入-1000条数据">使用Mybatis Foreach 插入 1000条数据</h3>
+<pre><code class="language-java">@Test
+	public void  foreachInsert(){
+			long current=System.currentTimeMillis();
+			List&lt;User&gt; users=new ArrayList&lt;&gt;();
+			for (int i = 0; i &lt; 1000; i++) {
+				User user=new User();
+				user.setName(System.currentTimeMillis()+&quot;&quot;);
+				user.setNum(i);
+				users.add(user);
+			}
+			userService.insertBatch(users);
+			long end=System.currentTimeMillis();
+			log.info(&quot;插入时间：&quot;+(end-current));
+	}
+</code></pre>
+<pre><code class="language-xml">	&lt;insert id=&quot;insertBatch&quot; &gt;
+		insert  into user  (name,num) values
+		&lt;foreach collection=&quot;list&quot; item=&quot;item&quot; index=&quot;index&quot; separator=&quot;,&quot;&gt;
+			(#{item.name},#{item.num})
+		&lt;/foreach&gt;
+	&lt;/insert&gt;
+</code></pre>
+<p>插入时间：922</p>
+<hr>
+<h3 id="时间对比">时间对比</h3>
+<p>For 插入：78611</p>
+<p>Mybatis-plus 插入: 36904</p>
+<p>ForEach 插入：922</p>
+<p>结论：插入1000 条 数据，将数据拼接，通过sql 批量插入速度更快。</p>
+<p>😇 插入少量数据-10条</p>
+<p>For 插入：1809</p>
+<p>Mybatis-plus 插入: 1289</p>
+<p>ForEach 插入：838</p>
+<p>结论：少量插入数据，时间差距不大。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[链表回文]]></title>
         <id>https://gongPing123456.github.io/post/lian-biao-hui-wen/</id>

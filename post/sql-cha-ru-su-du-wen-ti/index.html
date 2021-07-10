@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" >
 
-<title>关于我 | 少年的小破站</title>
+<title>Sql 插入速度问题 | 少年的小破站</title>
 <meta name="description" content="🚆早一点，再早一点完善我的技术栈😊">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -85,21 +85,126 @@
                 <div class="paper">
                     <article class="article">
                         <h1>
-                            关于我
+                            Sql 插入速度问题
                         </h1>
                         <p class="article-meta">
-                            2019-01-25
+                            2021-07-10
                                 
+                                    <a href="https://gongPing123456.github.io/tag/N8ovADZjh/" class="badge warning">
+                                        Sql
+                                    </a>
+                                    
                         </p>
                         
+                            <img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/20210710122048.png" alt="Sql 插入速度问题">
+                            
                                 <div class="post-content">
-                                    <blockquote>
-<p>欢迎来到我的小破站呀，很高兴遇见你！🤝</p>
+                                    <p>🤓简单写一下，后续会深入Mybatis 和Mysql</p>
+<!-- more -->
+<blockquote>
+<p>在使用Mybatis-plus savaBatch 插入 1000条左右数据，会相应很久的时候</p>
+<p>开始以为是@Transactional的问题，😄的解决，结果发现是单纯的时间太长</p>
+<p>接下来 ，重新开一个简单的系统测试一下。🍳</p>
 </blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+<h3 id="准备">准备</h3>
+<img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/image-20210710112617442.png" alt="image-20210710112617442" style="zoom:50%;" />
+<p>创建一个用于插入的数据库。</p>
+<p>创建一个User 的插入结构，<img src="https://gp-bucket.oss-cn-beijing.aliyuncs.com/img/image-20210710112858295.png" alt="image-20210710112858295" style="zoom:50%;" /></p>
+<h3 id="使用for循环插入1000条数据">使用For循环插入1000条数据</h3>
+<pre><code class="language-java">@Test
+	void contextLoads() {
+		long current=System.currentTimeMillis();
+
+		for (int i = 0; i &lt; 1000; i++) {
+			User user=new User();
+			user.setName(System.currentTimeMillis()+&quot;&quot;);
+			user.setNum(i);
+			userService.save(user);
+		}
+		long end=System.currentTimeMillis();
+		log.info(&quot;插入时间：&quot;+(end-current));
+
+	}
+</code></pre>
+<p>插入时间：78611</p>
+<hr>
+<h3 id="使用mybatis-plus-savebatch-插入-1000条数据">使用Mybatis-plus saveBatch 插入 1000条数据</h3>
+<pre><code class="language-java">public void plusTest(){
+
+			long current=System.currentTimeMillis();
+			List&lt;User&gt; users=new ArrayList&lt;&gt;();
+			for (int i = 0; i &lt; 1000; i++) {
+				User user=new User();
+				user.setName(System.currentTimeMillis()+&quot;&quot;);
+				user.setNum(i);
+				users.add(user);
+			}
+			userService.saveBatch(users);
+			long end=System.currentTimeMillis();
+			log.info(&quot;插入时间：&quot;+(end-current));
+
+
+	}
+</code></pre>
+<p>插入时间：36904</p>
+<hr>
+<h4 id="mybatis-plus-savabatch-源码">Mybatis-plus savaBatch 源码</h4>
+<pre><code class="language-java"> @Transactional(
+        rollbackFor = {Exception.class}
+    )
+    public boolean saveBatch(Collection&lt;T&gt; entityList, int batchSize) {
+        String sqlStatement = this.sqlStatement(SqlMethod.INSERT_ONE);
+        int size = entityList.size();
+        this.executeBatch((sqlSession) -&gt; {
+            int i = 1;
+
+            for(Iterator var6 = entityList.iterator(); var6.hasNext(); ++i) {
+                T entity = var6.next();
+                sqlSession.insert(sqlStatement, entity);
+                if (i % batchSize == 0 || i == size) {
+                    sqlSession.flushStatements();
+                }
+            }
+
+        });
+        return true;
+    }
+</code></pre>
+<h3 id="使用mybatis-foreach-插入-1000条数据">使用Mybatis Foreach 插入 1000条数据</h3>
+<pre><code class="language-java">@Test
+	public void  foreachInsert(){
+			long current=System.currentTimeMillis();
+			List&lt;User&gt; users=new ArrayList&lt;&gt;();
+			for (int i = 0; i &lt; 1000; i++) {
+				User user=new User();
+				user.setName(System.currentTimeMillis()+&quot;&quot;);
+				user.setNum(i);
+				users.add(user);
+			}
+			userService.insertBatch(users);
+			long end=System.currentTimeMillis();
+			log.info(&quot;插入时间：&quot;+(end-current));
+	}
+</code></pre>
+<pre><code class="language-xml">	&lt;insert id=&quot;insertBatch&quot; &gt;
+		insert  into user  (name,num) values
+		&lt;foreach collection=&quot;list&quot; item=&quot;item&quot; index=&quot;index&quot; separator=&quot;,&quot;&gt;
+			(#{item.name},#{item.num})
+		&lt;/foreach&gt;
+	&lt;/insert&gt;
+</code></pre>
+<p>插入时间：922</p>
+<hr>
+<h3 id="时间对比">时间对比</h3>
+<p>For 插入：78611</p>
+<p>Mybatis-plus 插入: 36904</p>
+<p>ForEach 插入：922</p>
+<p>结论：插入1000 条 数据，将数据拼接，通过sql 批量插入速度更快。</p>
+<p>😇 插入少量数据-10条</p>
+<p>For 插入：1809</p>
+<p>Mybatis-plus 插入: 1289</p>
+<p>ForEach 插入：838</p>
+<p>结论：少量插入数据，时间差距不大。</p>
 
                                 </div>
                     </article>
@@ -115,6 +220,17 @@
 
                 <div class="paper" data-aos="fade-in">
                     
+                        <div class="next-post">
+                            <div class="next">
+                                下一篇
+                            </div>
+                            <a href="https://gongPing123456.github.io/post/lian-biao-hui-wen/">
+                                <h3 class="post-title">
+                                    链表回文
+                                </h3>
+                            </a>
+                        </div>
+                        
 
                             
                                     <div style="clear: both;"></div>
@@ -201,27 +317,27 @@
     </div>
     <div class="row">
       
-        <a href="https://gongPing123456.github.io/tag/N8ovADZjh/" class="badge secondary">
+        <a href="https://gongPing123456.github.io/tag/N8ovADZjh/" class="badge ">
           Sql
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/JGDumyQhG/" class="badge ">
+        <a href="https://gongPing123456.github.io/tag/JGDumyQhG/" class="badge warning">
           快慢指针
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/jF7iulx-1/" class="badge secondary">
+        <a href="https://gongPing123456.github.io/tag/jF7iulx-1/" class="badge warning">
           算法
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge ">
+        <a href="https://gongPing123456.github.io/tag/_-PaRy2J3/" class="badge secondary">
           链表
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/EKQ26gbcy/" class="badge success">
+        <a href="https://gongPing123456.github.io/tag/EKQ26gbcy/" class="badge warning">
           递归
         </a>
       
-        <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge secondary">
+        <a href="https://gongPing123456.github.io/tag/vbpCAqaR6/" class="badge warning">
           Spring
         </a>
       
