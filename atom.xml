@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gongPing123456.github.io</id>
     <title>少年的小破站</title>
-    <updated>2021-07-10T04:24:55.647Z</updated>
+    <updated>2021-07-13T09:39:19.257Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gongPing123456.github.io"/>
     <link rel="self" href="https://gongPing123456.github.io/atom.xml"/>
@@ -10,6 +10,235 @@
     <logo>https://gongPing123456.github.io/images/avatar.png</logo>
     <icon>https://gongPing123456.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 少年的小破站</rights>
+    <entry>
+        <title type="html"><![CDATA[青蛙跳台阶]]></title>
+        <id>https://gongPing123456.github.io/post/qing-wa-tiao-tai-jie/</id>
+        <link href="https://gongPing123456.github.io/post/qing-wa-tiao-tai-jie/">
+        </link>
+        <updated>2021-07-13T09:38:09.000Z</updated>
+        <summary type="html"><![CDATA[<p>n阶台阶，一次跳1，或者2，总共有多少种方法到达🕺🐸🐸🐸</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>n阶台阶，一次跳1，或者2，总共有多少种方法到达🕺🐸🐸🐸</p>
+<!-- more -->
+<h2 id="描述">描述</h2>
+<p>n阶台阶，一次跳1，或者2，总共有多少种方法到达🕺🐸🐸🐸</p>
+<h2 id="解析">解析</h2>
+<p>如果台阶级数大于2，设为n的话，这时我们把n级台阶时的跳法看成n的函数，记为<img src="https://math.jianshu.com/math?formula=f(n)" alt="f(n)" loading="lazy">,第一次跳的时候有2种不同的选择：一是第一次跳一级，此时跳法的数目等于后面剩下的n-1级台阶的跳法数目，即为<img src="https://math.jianshu.com/math?formula=f(n-1)" alt="f(n-1)" loading="lazy">,二是第一次跳二级，此时跳法的数目等于后面剩下的n-2级台阶的跳法数目，即为<img src="https://math.jianshu.com/math?formula=f(n-2)" alt="f(n-2)" loading="lazy">,因此n级台阶的不同跳法的总数为<img src="https://math.jianshu.com/math?formula=f(n)%20%3D%20f(n-1)%20%2B%20f(n-2)" alt="f(n) = f(n-1) + f(n-2)" loading="lazy">，不难看出就是斐波那契数列</p>
+<h3 id="斐波那契数列">斐波那契数列</h3>
+<p>又称<a href="https://baike.baidu.com/item/%E9%BB%84%E9%87%91%E5%88%86%E5%89%B2/115896">黄金分割</a>数列，因数学家莱昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“<a href="https://baike.baidu.com/item/%E5%85%94%E5%AD%90%E6%95%B0%E5%88%97/6849441">兔子数列</a>”，指的是这样一个数列：0、1、1、2、3、5、8、13、21、34、……在数学上，斐波那契数列以如下被以递推的方法定义：<em>F</em>(0)=0，<em>F</em>(1)=1, <em>F</em>(n)=<em>F</em>(n - 1)+<em>F</em>(n - 2)（<em>n</em> ≥ 2，<em>n</em> ∈ N*）在现代物理、准<a href="https://baike.baidu.com/item/%E6%99%B6%E4%BD%93%E7%BB%93%E6%9E%84/10401467">晶体结构</a>、化学等领域，斐波纳契数列都有直接的应用，为此，美国数学会从 1963 年起出版了以《斐波纳契数列季刊》为名的一份数学杂志，用于专门刊载这方面的研究成果。</p>
+<h3 id="代码实现">代码实现</h3>
+<pre><code class="language-java">public class 青蛙跳台阶问题 {
+   private static int num =0;
+   public static int numWays(int n) {
+      if (n == 1|| n ==0)
+         return n;
+
+      return go2(n);
+   }
+  // 解法一
+   private static int go (int n){
+      if (n == 1)return 1;
+      if (n==2)return 2;
+      return go(n-1)+go(n-2);
+   }
+  //解法二
+   private static int go2(int n){
+      if (n == 0||n==1)return 1;
+      if (n ==2 )return 2;
+      int  one =1;
+      int two =2;
+      int sum =0;
+
+      for (int i =2; i &lt; n; i++) {
+         sum   = (one + two)%1000000007;
+         one =two;
+         two =sum;
+      }
+      return sum;
+   }
+   public static void main(String[] args) {
+      int i = numWays(46);
+      System.out.println(i);
+
+   }
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[二分法问题]]></title>
+        <id>https://gongPing123456.github.io/post/er-fen-fa-wen-ti/</id>
+        <link href="https://gongPing123456.github.io/post/er-fen-fa-wen-ti/">
+        </link>
+        <updated>2021-07-13T09:35:55.000Z</updated>
+        <summary type="html"><![CDATA[<p>📢二分查找三个不同的问题</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>📢二分查找三个不同的问题</p>
+<!-- more -->
+<h1 id="二分查找">二分查找</h1>
+<p>二分查找三个不同的问题</p>
+<p>📢 对于start 和end 的边界问题！！！！</p>
+<pre><code class="language-java">/**
+* 查找元素位置
+**/
+public int search(int[] nums, int target) {
+   int end,start =0,middle=0;
+   int length = nums.length-1;
+   end =length;
+   while (end &gt;= start){
+      middle =start + (end-start)/2;
+      if (nums[middle] == target)return middle;
+      if (nums[middle]  &gt;target){
+         end =middle -1;
+      }else {
+         start =middle +1;
+      }
+
+   }
+   return  -1;
+}
+
+/**
+ * 查找第一个错题
+ */
+public int firstBadVersion(int n) {
+   int end,start =1,middle=1;
+   int length = n;
+   end =length;
+   while (end &gt;= start){
+      middle =start +(end -start)/2;
+      if(isBadVersion(middle)){
+         end = middle;
+      }
+      else {
+         start =middle +1;
+      }
+   }
+   return  end;
+}
+
+private boolean isBadVersion(int num){
+   return true;
+}
+/**
+ * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。
+ * 如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+ *1,3,4   2
+ * 你可以假设数组中无重复元素
+ * 因为需要插入 到相同数的前面，所以只需要返回大一位（相等数的前一位）
+ */
+
+public int searchInsert(int[] nums, int target) {
+   int start,end,middle=0;
+   start=0;end=nums.length-1;
+   if (target &lt;=nums[0]){return 0;}
+   if (target&gt;nums[end]){return end+1;}
+   while (end&gt;start){
+      middle=start +(end-start)/2;
+      if (nums[middle]&gt;=target){
+         end = middle;
+      }else {
+         start =middle +1;
+      }
+      // if (start +1 == end){
+      //     return start;
+      // }
+   }
+
+
+
+   return end;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[二分法]]></title>
+        <id>https://gongPing123456.github.io/post/er-fen-fa/</id>
+        <link href="https://gongPing123456.github.io/post/er-fen-fa/">
+        </link>
+        <updated>2021-07-13T09:35:55.000Z</updated>
+        <summary type="html"><![CDATA[<p>📢二分查找三个不同的问题</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>📢二分查找三个不同的问题</p>
+<!-- more -->
+<h1 id="二分查找">二分查找</h1>
+<p>二分查找三个不同的问题</p>
+<p>📢 对于start 和end 的边界问题！！！！</p>
+<pre><code class="language-java">/**
+* 查找元素位置
+**/
+public int search(int[] nums, int target) {
+   int end,start =0,middle=0;
+   int length = nums.length-1;
+   end =length;
+   while (end &gt;= start){
+      middle =start + (end-start)/2;
+      if (nums[middle] == target)return middle;
+      if (nums[middle]  &gt;target){
+         end =middle -1;
+      }else {
+         start =middle +1;
+      }
+
+   }
+   return  -1;
+}
+
+/**
+ * 查找第一个错题
+ */
+public int firstBadVersion(int n) {
+   int end,start =1,middle=1;
+   int length = n;
+   end =length;
+   while (end &gt;= start){
+      middle =start +(end -start)/2;
+      if(isBadVersion(middle)){
+         end = middle;
+      }
+      else {
+         start =middle +1;
+      }
+   }
+   return  end;
+}
+
+private boolean isBadVersion(int num){
+   return true;
+}
+/**
+ * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。
+ * 如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+ *1,3,4   2
+ * 你可以假设数组中无重复元素
+ * 因为需要插入 到相同数的前面，所以只需要返回大一位（相等数的前一位）
+ */
+
+public int searchInsert(int[] nums, int target) {
+   int start,end,middle=0;
+   start=0;end=nums.length-1;
+   if (target &lt;=nums[0]){return 0;}
+   if (target&gt;nums[end]){return end+1;}
+   while (end&gt;start){
+      middle=start +(end-start)/2;
+      if (nums[middle]&gt;=target){
+         end = middle;
+      }else {
+         start =middle +1;
+      }
+      // if (start +1 == end){
+      //     return start;
+      // }
+   }
+
+
+
+   return end;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Sql 插入速度问题]]></title>
         <id>https://gongPing123456.github.io/post/sql-cha-ru-su-du-wen-ti/</id>
