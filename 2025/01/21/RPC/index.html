@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java RPC 框架实现原理与代码实践 | BitWorld</title><meta name="author" content="Ping"><meta name="copyright" content="Ping"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="通过原生 Java 实现一个简单的 RPC 框架，包含服务端和客户端，深入理解 RPC 调用原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java RPC 框架实现原理与代码实践">
+<meta property="og:url" content="https://gongping123456.github.io/2025/01/21/RPC/index.html">
+<meta property="og:site_name" content="BitWorld">
+<meta property="og:description" content="通过原生 Java 实现一个简单的 RPC 框架，包含服务端和客户端，深入理解 RPC 调用原理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgapi.cn/api.php">
+<meta property="article:published_time" content="2025-01-21T01:45:35.000Z">
+<meta property="article:modified_time" content="2026-02-04T03:10:33.290Z">
+<meta property="article:author" content="Ping">
+<meta property="article:tag" content="反射">
+<meta property="article:tag" content="RPC">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Socket">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgapi.cn/api.php"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Java RPC 框架实现原理与代码实践",
+  "url": "https://gongping123456.github.io/2025/01/21/RPC/",
+  "image": "https://imgapi.cn/api.php",
+  "datePublished": "2025-01-21T01:45:35.000Z",
+  "dateModified": "2026-02-04T03:10:33.290Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Ping",
+      "url": "https://gongping123456.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.svg"><link rel="canonical" href="https://gongping123456.github.io/2025/01/21/RPC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java RPC 框架实现原理与代码实践',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/favicon.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Category</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fas fa-video"></i><span> picture</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://imgapi.cn/api.php);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/favicon.svg" alt="Logo"><span class="site-name">BitWorld</span></a><a class="nav-page-title" href="/"><span class="site-name">Java RPC 框架实现原理与代码实践</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Category</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fas fa-video"></i><span> picture</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Java RPC 框架实现原理与代码实践</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-21T01:45:35.000Z" title="发表于 2025-01-21 09:45:35">2025-01-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T03:10:33.290Z" title="更新于 2026-02-04 11:10:33">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java%E5%BC%80%E5%8F%91/">Java开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="RPC-简单实现原理"><a href="#RPC-简单实现原理" class="headerlink" title="RPC 简单实现原理"></a>RPC 简单实现原理</h2><p>RPC（Remote Procedure Call，远程过程调用）是一种计算机通信协议，允许一台计算机上的程序调用另一台计算机上的程序，就像调用本地函数一样。本文将通过原生 Java 实现一个简单的 RPC 框架，帮助你理解 RPC 的核心原理。</p>
+<h3 id="技术实现方案"><a href="#技术实现方案" class="headerlink" title="技术实现方案"></a>技术实现方案</h3><p>本实现采用以下技术：</p>
+<ul>
+<li><strong>JDK 动态代理</strong>：用于创建客户端代理对象</li>
+<li><strong>Socket 通信</strong>：实现网络数据传输</li>
+<li><strong>Java 反射</strong>：服务端动态调用目标方法</li>
+</ul>
+<h3 id="数据传输对象"><a href="#数据传输对象" class="headerlink" title="数据传输对象"></a>数据传输对象</h3><p>首先，我们需要定义一个用于网络传输的数据对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcObject</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; c;</span><br><span class="line">    <span class="keyword">private</span> String methodName;</span><br><span class="line">    <span class="keyword">private</span> Object[] args;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法、getter 和 setter</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RpcObject</span><span class="params">(Class&lt;?&gt; c, String methodName, Object[] args)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.c = c;</span><br><span class="line">        <span class="built_in">this</span>.methodName = methodName;</span><br><span class="line">        <span class="built_in">this</span>.args = args;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getter 和 setter 方法</span></span><br><span class="line">    <span class="keyword">public</span> Class&lt;?&gt; getC() &#123; <span class="keyword">return</span> c; &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getMethodName</span><span class="params">()</span> &#123; <span class="keyword">return</span> methodName; &#125;</span><br><span class="line">    <span class="keyword">public</span> Object[] getArgs() &#123; <span class="keyword">return</span> args; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>：所有用于网络传输的对象都必须实现 <code>Serializable</code> 接口。</p>
+</blockquote>
+<h2 id="服务端实现"><a href="#服务端实现" class="headerlink" title="服务端实现"></a>服务端实现</h2><h3 id="接口定义和实现"><a href="#接口定义和实现" class="headerlink" title="接口定义和实现"></a>接口定义和实现</h3><p>首先定义一个简单的服务接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">   String <span class="title function_">hello</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloService</span> <span class="keyword">implements</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;hello: &quot;</span>+name;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端核心处理类"><a href="#服务端核心处理类" class="headerlink" title="服务端核心处理类"></a>服务端核心处理类</h3><p>服务端需要监听客户端请求，解析调用信息并执行相应的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Socket s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RpcThread</span><span class="params">(Socket s)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.s = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">is</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">os</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            is = <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(s.getInputStream());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取远程调用参数</span></span><br><span class="line">            <span class="type">RpcObject</span> <span class="variable">rpcObject</span> <span class="operator">=</span> (RpcObject) is.readObject();</span><br><span class="line">            System.out.println(<span class="string">&quot;Method:&quot;</span> + rpcObject.getMethodName());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 构建接口实现类，通过反射调用方法</span></span><br><span class="line">            <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> getObject(rpcObject.getC());</span><br><span class="line"></span><br><span class="line">            <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> executeMethod(o, rpcObject.getMethodName(), rpcObject.getArgs());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 返回执行结果</span></span><br><span class="line">            os = <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(s.getOutputStream());</span><br><span class="line">            os.writeObject(result);</span><br><span class="line">            os.flush();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(is != <span class="literal">null</span>) is.close();</span><br><span class="line">                <span class="keyword">if</span>(os != <span class="literal">null</span>) os.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过反射执行方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">executeMethod</span><span class="params">(Object o, String methodName, Object[] args)</span> &#123;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        Class&lt;?&gt;[] paramTypes = <span class="keyword">new</span> <span class="title class_">Class</span>[args.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; args.length; i++) &#123;</span><br><span class="line">            paramTypes[i] = args[i].getClass();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> o.getClass().getMethod(methodName, paramTypes);</span><br><span class="line">            result = method.invoke(o, args);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据接口名获取实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getObject</span><span class="params">(Class&lt;?&gt; c)</span> &#123;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Loading class: &quot;</span> + c.getName());</span><br><span class="line">            obj = ConfMonitor.conf.get(c.getName()).newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务注册中心"><a href="#服务注册中心" class="headerlink" title="服务注册中心"></a>服务注册中心</h3><p>我们需要一个简单的服务注册机制：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConfMonitor</span> &#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;rawtypes&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Class&gt; conf = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, Class&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        conf.put(<span class="string">&quot;com.gp.service.Hello&quot;</span>, HelloService.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端启动"><a href="#服务端启动" class="headerlink" title="服务端启动"></a>服务端启动</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">PORT</span> <span class="operator">=</span> <span class="number">9001</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">ServerSocket</span> <span class="variable">serverSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(PORT);</span><br><span class="line">        System.out.println(<span class="string">&quot;RPC Server started on port &quot;</span> + PORT);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Socket</span> <span class="variable">socket</span> <span class="operator">=</span> serverSocket.accept();</span><br><span class="line">            <span class="keyword">if</span> (socket != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">RpcThread</span>(socket).start();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h2><h3 id="代理工厂"><a href="#代理工厂" class="headerlink" title="代理工厂"></a>代理工厂</h3><p>客户端通过动态代理创建远程服务的代理对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> &#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T <span class="title function_">create</span><span class="params">(Class&lt;T&gt; serviceClass, String ip, <span class="type">int</span> port)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (T) Proxy.newProxyInstance(</span><br><span class="line">            serviceClass.getClassLoader(),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Class</span>&lt;?&gt;[] &#123; serviceClass &#125;,</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">RpcProxy</span>(ip, port, serviceClass)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="RPC-代理处理器"><a href="#RPC-代理处理器" class="headerlink" title="RPC 代理处理器"></a>RPC 代理处理器</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcProxy</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String ip;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> port;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;?&gt; serviceClass;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RpcProxy</span><span class="params">(String ip, <span class="type">int</span> port, Class&lt;?&gt; serviceClass)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.ip = ip;</span><br><span class="line">        <span class="built_in">this</span>.port = port;</span><br><span class="line">        <span class="built_in">this</span>.serviceClass = serviceClass;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">// 通过Socket调用远程服务</span></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Socket</span> <span class="variable">socket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(ip, port);</span><br><span class="line">             <span class="type">ObjectOutputStream</span> <span class="variable">os</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(socket.getOutputStream());</span><br><span class="line">             <span class="type">ObjectInputStream</span> <span class="variable">is</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(socket.getInputStream())) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 封装调用信息</span></span><br><span class="line">            <span class="type">RpcObject</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RpcObject</span>(serviceClass, method.getName(), args);</span><br><span class="line">            os.writeObject(request);</span><br><span class="line">            os.flush();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取返回结果</span></span><br><span class="line">            <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> is.readObject();</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端启动"><a href="#客户端启动" class="headerlink" title="客户端启动"></a>客户端启动</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> <span class="string">&quot;localhost&quot;</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">port</span> <span class="operator">=</span> <span class="number">9001</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建代理对象</span></span><br><span class="line">    <span class="type">Hello</span> <span class="variable">hello</span> <span class="operator">=</span> ProxyFactory.create(Hello.class, ip, port);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用远程方法</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> hello.hello(<span class="string">&quot;小明&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;Result: &quot;</span> + result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个简单的 RPC 框架实现了以下核心功能：</p>
+<ol>
+<li><strong>客户端</strong>：通过动态代理创建远程服务接口的代理对象，调用方法时通过网络发送请求</li>
+<li><strong>服务端</strong>：监听客户端请求，解析调用信息，通过反射执行对应的方法并返回结果</li>
+<li><strong>数据传输</strong>：使用序列化的对象在网络中传输方法名、参数等信息</li>
+</ol>
+<h3 id="改进方向"><a href="#改进方向" class="headerlink" title="改进方向"></a>改进方向</h3><p>当前实现还有很多可以改进的地方：</p>
+<ol>
+<li><strong>连接管理</strong>：使用连接池管理Socket连接，避免频繁创建和销毁连接</li>
+<li><strong>异步调用</strong>：支持异步调用，提高系统吞吐量</li>
+<li><strong>负载均衡</strong>：支持多服务实例，实现负载均衡</li>
+<li><strong>服务注册</strong>：使用注册中心实现服务自动注册和发现</li>
+<li><strong>异常处理</strong>：完善的异常处理机制</li>
+<li><strong>序列化优化</strong>：使用更高效的序列化方式（如 Protobuf）</li>
+<li><strong>通信协议</strong>：使用HTTP&#x2F;2或gRPC等更现代的通信协议</li>
+</ol>
+<p>通过这个简单的实现，我们可以更好地理解 RPC 框架的工作原理，为后续学习更复杂的 RPC 框架（如 Dubbo、gRPC等）打下基础。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://gongPing123456.github.io">Ping</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://gongping123456.github.io/2025/01/21/RPC/">https://gongping123456.github.io/2025/01/21/RPC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://gongPing123456.github.io" target="_blank">BitWorld</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%B0%84/">反射</a><a class="post-meta__tags" href="/tags/RPC/">RPC</a><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/Socket/">Socket</a><a class="post-meta__tags" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></div><div class="post-share"><div class="social-share" data-image="https://imgapi.cn/api.php" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/02/04/hello-world/" title="欢迎来到 BitWorld"><img class="cover" src="https://imgapi.cn/api.php" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">欢迎来到 BitWorld</div></div><div class="info-2"><div class="info-item-1">欢迎来到 BitWorld！这是一个基于 Hexo 和 Butterfly 主题搭建的技术博客。本站旨在分享技术知识、记录学习心得、探讨编程之美。 关于 BitWorldBitWorld 是一个专注于技术分享的个人博客，涵盖编程、软件开发、系统设计等技术领域。通过这个平台，我希望能够：  分享实用的技术知识和最佳实践 记录学习和成长的过程 探索前沿技术的实际应用 与开发者社区交流和互动  技术栈 博客框架: Hexo - 快速、简洁且强大的静态博客生成框架 主题: Butterfly - 一款功能丰富、设计精美的 Hexo 主题 部署平台: GitHub Pages - 免费、稳定、快速的静态网站托管服务  如何开始如果你也想搭建一个类似的技术博客，可以参考以下步骤： 1. 安装 Hexo首先，你需要安装 Node.js 和 Git。然后安装 Hexo： 1npm install -g hexo-cli  2. 创建项目123hexo init my-blogcd my-blognpm install  3. 安装主题下载 Butterfly 主题： 1git clone...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/favicon.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Ping</div><div class="author-info-description">一个热爱技术的程序员，对代码世界充满好奇心和探索欲。专注于后端开发、微服务架构和性能优化。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/gongPing123456"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/gongPing123456" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:your-email@example.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/your-zhihu-id" target="_blank" title="知乎"><i class="fas fa-zhihu" style="color: #0066ff;"></i></a><a class="social-icon" href="https://twitter.com/your-twitter-id" target="_blank" title="Twitter"><i class="fab fa-twitter" style="color: #1da1f2;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到 BitWorld！这里是我的技术博客，分享编程经验、技术感悟和学习心得。让我们一起在技术的世界里探索和成长！🚀</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC-%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">RPC 简单实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="toc-number">1.1.</span> <span class="toc-text">技术实现方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">数据传输对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">服务端实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">接口定义和实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A0%B8%E5%BF%83%E5%A4%84%E7%90%86%E7%B1%BB"><span class="toc-number">2.2.</span> <span class="toc-text">服务端核心处理类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-number">2.3.</span> <span class="toc-text">服务注册中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8"><span class="toc-number">2.4.</span> <span class="toc-text">服务端启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">客户端实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B7%A5%E5%8E%82"><span class="toc-number">3.1.</span> <span class="toc-text">代理工厂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-%E4%BB%A3%E7%90%86%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">3.2.</span> <span class="toc-text">RPC 代理处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%AF%E5%8A%A8"><span class="toc-number">3.3.</span> <span class="toc-text">客户端启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E8%BF%9B%E6%96%B9%E5%90%91"><span class="toc-number">4.1.</span> <span class="toc-text">改进方向</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/04/hello-world/" title="欢迎来到 BitWorld"><img src="https://imgapi.cn/api.php" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="欢迎来到 BitWorld"/></a><div class="content"><a class="title" href="/2025/02/04/hello-world/" title="欢迎来到 BitWorld">欢迎来到 BitWorld</a><time datetime="2025-02-04T02:00:00.000Z" title="发表于 2025-02-04 10:00:00">2025-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/21/RPC/" title="Java RPC 框架实现原理与代码实践"><img src="https://imgapi.cn/api.php" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java RPC 框架实现原理与代码实践"/></a><div class="content"><a class="title" href="/2025/01/21/RPC/" title="Java RPC 框架实现原理与代码实践">Java RPC 框架实现原理与代码实践</a><time datetime="2025-01-21T01:45:35.000Z" title="发表于 2025-01-21 09:45:35">2025-01-21</time></div></div></div></div></div></div></main><footer id="footer"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
